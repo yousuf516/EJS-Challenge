@@ -15,6 +15,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+app.get("/", function(req, res){
+  res.render("home", {Speech: homeStartingContent});
+});
 
 
 
@@ -27,7 +30,7 @@ app.use(express.static("public"));
 
 
 
-
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
+var port = 5501;
+app.listen(port, function() {
+    console.log("Server started on port " + port + ".");
 });
