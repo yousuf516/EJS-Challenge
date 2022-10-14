@@ -36,12 +36,20 @@ app.post('/compose', function(req, res){
     body : req.body.composeBody
   }
   posts.push(post);
-  res.redirect("/")
+  res.redirect("/");
 
 });
 
+app.get("/posts/:title", function(req, res){
+    const titleparam = req.params.title;
 
+    for(var i = 0; i<posts.length; i++){
+    if(titleparam == posts[i].text){
+      console.log("Match Found");
+    }
+    }
 
+});
 
 
 
