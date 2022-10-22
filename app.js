@@ -59,23 +59,23 @@ app.post('/compose', function(req, res){
 
   const currentPost = Fpost._id;
 
-  Fpost.save();
-  res.redirect("/");
+  Fpost.save(function(err){
+    if (!err){
+      res.redirect("/");
+    }
+  });
 
 });
 
-app.get("/posts/:title", function(req, res){
-    var temptitle = req.params.title;
-    let titleparam = _.lowerCase(temptitle);
-    
-    for(var i = 0; i<posts.length; i++){
-    lowerCasedPostText = _.lowerCase(posts[i].text);
-    if(titleparam == lowerCasedPostText){
-        res.render("post", {postText: posts[i].text, postBody: posts[i].body});
-    }
-    }
+app.get("/posts/:postId", function(req, res){
+  const requestedPostId = req.params.postId;
 
-    
+  postDB.findOne({_id: requestedPostId}, function(err, post){
+    res.render("post", {
+      postText: post.postTitle,
+      postBody: post.postContent
+    });
+  });
 
 });
 
