@@ -13,8 +13,6 @@ mongoose.connect("mongodb://localhost:27017/blogDB");
 const app = express();
 app.set('view engine', 'ejs');
 
-var posts = [];
-
 const postsSchema = {
   postTitle: {
       type: String,
@@ -33,7 +31,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 app.get("/", function(req, res){
-  res.render("home", {homeSpeech: homeStartingContent, posts: posts});
+  
+  postDB.find({}, function(err, outcome){
+    if(!err){
+      res.render("home", {homeSpeech: homeStartingContent, posts: outcome});}
+  });
+
 });
 
 app.get("/about", function(req, res){
@@ -49,20 +52,15 @@ app.get("/compose", function(req, res){
 });
 
 app.post('/compose', function(req, res){
-  var post ={
-    text : req.body.composeText,
-    body : req.body.composeBody
-  }
-  posts.push(post);
-  res.redirect("/");
-
   const Fpost = new postDB ({
     postTitle: req.body.composeText,
     postContent: req.body.composeBody
   });
 
-  Fpost.save();
+  const currentPost = Fpost._id;
 
+  Fpost.save();
+  res.redirect("/");
 
 });
 
